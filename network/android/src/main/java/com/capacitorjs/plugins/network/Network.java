@@ -1,5 +1,7 @@
 package com.capacitorjs.plugins.network;
 
+import static android.content.Context.RECEIVER_NOT_EXPORTED;
+
 import android.annotation.TargetApi;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -141,7 +143,11 @@ public class Network {
     @TargetApi(Build.VERSION_CODES.M)
     public void startMonitoring(AppCompatActivity activity) {
         IntentFilter filter = new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE");
-        activity.registerReceiver(receiver, filter);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            activity.registerReceiver(receiver, filter, RECEIVER_NOT_EXPORTED);
+        } else {
+            activity.registerReceiver(receiver, filter);
+        }
     }
 
     /**
